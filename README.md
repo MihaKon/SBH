@@ -11,4 +11,5 @@
 ## Authors
 
 Michał Konon
+
 Sergiusz Urbaniak
