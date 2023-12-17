@@ -1,49 +1,50 @@
 #include <string>
 #include <vector>
-#include <fstream>
 #include <random>
 #include <algorithm>
-#include <iostream>
+
 #include "SequenceGenerator.hpp"
 
-std::vector<std::string> getSequence(const int &totalLen, const int &subSeqLen)
+std::string getSequence(const int &len)
 {
-    std::string seq;
-    std::vector<std::string> subSequences;
-    for (int i = 0; i < totalLen; i++)
+    const std::string nucleotides = "ACGT";
+
+    std::string sequence;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    std::uniform_int_distribution<> dis(0, nucleotides.size() - 1);
+
+    for (int i = 0; i < len; i++)
     {
-        seq += getRandomNucleotide();
+        sequence += nucleotides[dis(gen)];
     }
 
-    exportSequence(seq);
+    return sequence;
+}
 
-    for (size_t i = 0; i < seq.length(); i += subSeqLen)
+std::vector<std::string> getSubSequences(std::string &sequence, const int &subSeqLen, bool addPositiveErrors, bool addNegativeErrors)
+{
+    std::vector<std::string> subSequences;
+
+    for (size_t i = 0; i < sequence.length() - subSeqLen + 1; i++)
     {
-        subSequences.push_back(seq.substr(i, subSeqLen));
+        subSequences.push_back(sequence.substr(i, subSeqLen));
+    }
+
+    if (addPositiveErrors)
+    {
+        subSequences.push_back(getSequence(subSeqLen));
+    }
+
+    if (addNegativeErrors)
+    {
+        int randomIndex = rand() % sequence.size();
+        subSequences.erase(subSequences.begin() + randomIndex);
     }
 
     std::sort(subSequences.begin(), subSequences.end());
 
     return subSequences;
-}
-
-char getRandomNucleotide()
-{
-    std::random_device rd;
-    std::mt19937 gen(rd());
-
-    const std::string nucleotides = "ACGT";
-
-    std::uniform_int_distribution<> dis(0, nucleotides.size() - 1);
-    int randomIndex = dis(gen);
-
-    return nucleotides[randomIndex];
-}
-
-void exportSequence(std::string &sequence)
-{
-    std::ofstream sequenceFileStream;
-    sequenceFileStream.open("sequence.txt", std::ios::out);
-    sequenceFileStream << sequence;
-    sequenceFileStream.close();
 }
