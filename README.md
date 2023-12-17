@@ -16,4 +16,4 @@ Sergiusz Urbaniak
 
 ## Reference
 
-Levenshtein Distance Calculator is a modified version of this repo: ![Levenshtein](https://github.com/guilhermeagostinelli/levenshtein) Visited at: 17.12.2023
+Levenshtein Distance Calculator is a modified version of this repo: [Levenshtein](https://github.com/guilhermeagostinelli/levenshtein) Visited at: 17.12.2023
