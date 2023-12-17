@@ -26,13 +26,14 @@ std::string getSequence(const int &len)
 
 std::vector<std::string> getSubSequences(std::string &sequence, const int &subSeqLen, bool addPositiveErrors, bool addNegativeErrors)
 {
+    
     std::vector<std::string> subSequences;
 
     for (size_t i = 0; i < sequence.length() - subSeqLen + 1; i++)
     {
         subSequences.push_back(sequence.substr(i, subSeqLen));
     }
-
+    //TODO: ask how many errors should occur per instance
     if (addPositiveErrors)
     {
         subSequences.push_back(getSequence(subSeqLen));
