@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(SOURCES
     src/main.cpp
+    src/SequenceStructure.hpp
     src/SequenceGenerator.hpp
     src/SequenceGenerator.cpp
     )
