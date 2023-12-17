@@ -3,4 +3,9 @@ project(SBH VERSION 0.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(main src/main.cpp)
+set(SOURCES
+    src/main.cpp
+    src/SequenceGenerator.hpp
+    src/SequenceGenerator.cpp
+    )
+add_executable(SBH ${SOURCES})
