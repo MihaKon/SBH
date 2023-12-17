@@ -8,5 +8,7 @@ set(SOURCES
     src/SequenceStructure.hpp
     src/SequenceGenerator.hpp
     src/SequenceGenerator.cpp
+    src/LevenshteinDistanceCalc.hpp
+    src/LevenshteinDistanceCalc.cpp
     )
 add_executable(SBH ${SOURCES})
