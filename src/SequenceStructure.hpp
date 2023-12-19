@@ -6,8 +6,8 @@
 struct Sequence {
     int sequenceLen;
     int subSequenceLen;
-    bool positiveError = false;
-    bool negativeError = false;
+    bool positiveError;
+    bool negativeError;
     std::string sequence;
     std::string startingSubSequence;
     std::vector<std::string> subSequences;
