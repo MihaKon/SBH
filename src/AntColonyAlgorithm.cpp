@@ -31,7 +31,6 @@ struct Edge {
 struct Graph {
     std::vector<Vertex> V;
     std::vector<Edge> A; 
-    std::vector<std::string> spectrum; //?
 
     void addEdge(int u, int v, float weight){
         A.emplace_back(u,v,weight);
@@ -72,7 +71,7 @@ std::vector<int> findBestSubpath(const Path& path){
     return subpath;
 }
 
-int ChooseInitialOligonucleotide(const std::vector<Vertex>& V){
+int ChooseInitialOligonucleotide(const std::vector<Vertex>& V){ // OK
     // wybierz losowo oligonukleotyd z S
     if (V.empty()){
         std::cerr << "Empty set of oligonucleotides.\n";
@@ -94,17 +93,17 @@ int ChooseInitialOligonucleotide(const std::vector<Vertex>& V){
 int chooseNext(const std::vector<Vertex>& V, const int& n){
     return 0;
 }
-std::string ConstructForwardSolution(const Graph& G, const std::vector<std::vector<float>>& pheromones, Path& path, const int& n, const int& subSequencesLength){
+std::string ConstructForwardSolution(const Graph& G, const std::vector<std::vector<float>>& pheromones, Path& path, const std::vector<std::string>& spectrum, const int& n, const int& subSequencesLength){
     int oligonucleotideID = ChooseInitialOligonucleotide(G.V); // i* =
     
     path.OligoIDs.emplace_back(oligonucleotideID); // p = i*
     
-    std::vector<std::string> tempSpectrum = G.spectrum; // S'=S
+    std::vector<std::string> tempSpectrum = spectrum; // S'=S
 
     while (path.getCost(path.OligoIDs, G, subSequencesLength)){
         //tempSpectrum.erase(oligonucleotideID); //auto it-> do zmiany // S' = S'\{i*}
         oligonucleotideID = chooseNext(G.V, n); // i* = chooseNext(S'), do zmiany argumenty funkcji
-        path.OligoIDs.push_back(oligonucleotideID); // Extend path p by adding i*  to its end
+        path.OligoIDs.push_back(oligonucleotideID); // Extend path p by adding i*  to its end, OK
     }
 
     path.OligoIDs = findBestSubpath(path);
@@ -120,7 +119,7 @@ std::string ConstructBackwardSolution(const Graph& G, const std::vector<std::vec
 void ApplyPheromoneUpdate(){}
 void ResetPheromoneValeus(std::vector<std::vector<float>>& pheromones){}
 
-void InitializePheromoneValues(std::vector<std::vector<float>>& pheromones) {
+void InitializePheromoneValues(std::vector<std::vector<float>>& pheromones) { // OK
     int n = pheromones.size();
 
     for (int i = 0; i < n; i++) {
@@ -135,7 +134,7 @@ void AntColonySBH(const Graph& graph, const int n){
     float cf = 0.0f;
     bool bs_update = false;
 
-    int nf = 3;
+    int nf = 3; 
     int nb = 3;
  
     std::vector<std::vector<float>> pheromone_matrix(graph.A.size(), std::vector<float>(graph.A.size()));
