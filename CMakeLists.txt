@@ -12,5 +12,7 @@ set(SOURCES
     src/LevenshteinDistanceCalc.cpp
     src/BruteForceAlgorithm.hpp
     src/BruteForceAlgorithm.cpp
+    src/AntColonyAlgorithm.hpp
+    src/AntColonyAlgorithm.cpp
     )
 add_executable(SBH ${SOURCES})
