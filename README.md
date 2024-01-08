@@ -20,4 +20,4 @@ Levenshtein Distance Calculator is a modified version of this repo: [Levenshtein
 
 ## Ant Colony Algorithm
 
-
+ACO Generator based on [New algorithms for DNA sequencing by hybridization](https://www.semanticscholar.org/paper/New-algorithms-for-DNA-sequencing-by-hybridization-Blum-Vallès/4835c585c4b191c4066f5b20474ff519280ce2df)
