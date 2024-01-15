@@ -12,5 +12,9 @@ set(SOURCES
     src/LevenshteinDistanceCalc.cpp
     src/BruteForceAlgorithm.hpp
     src/BruteForceAlgorithm.cpp
+    src/sequenceReproducer.hpp
+    src/sequenceReproducer.cpp
+    src/GreedyHeuristicAlgorithm.hpp
+    src/GreedyHeuristicAlgorithm.cpp
     )
 add_executable(SBH ${SOURCES})
