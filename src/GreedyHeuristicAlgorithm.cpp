@@ -96,7 +96,7 @@ struct Path {
 
     float getCost(const Graph& G, const int& l) const {
         int pathLength = oligos.size(); 
-        float cost = pathLength * l; // l(p) * l
+        float cost = pathLength * l;
 
         for (int i = 0; i < pathLength - 1; i++) {
             Vertex oligo1 = oligos[i];
@@ -119,7 +119,6 @@ float calculateScore(const Vertex& u, const Vertex& v, const Graph& G) {
 }
 
 Vertex chooseNext(const std::vector<Vertex>& S, const Vertex& u, const Graph& G, std::multimap<Vertex, Vertex>& candidates) {
-    // wybierz następny oligonukleotyd, patrząc w przód na potencjalne przyszłe najlepsze sąsiedztwo
     Vertex bestNextOligo;
     int maxScore=0;
     int maxSumScore = 0;
@@ -147,20 +146,20 @@ std::vector<Vertex> constructForwardSolution(const Graph& G, const int& n, const
             oligo = v;
             break;
         }
-    } //chooseInitialOligo(G.V); // i* =
+    }
     std::vector<Path> paths;
     Path path;
     std::multimap<Vertex, Vertex> candidates;
-    path.oligos.emplace_back(oligo); // p = i*
-    std::vector<Vertex> spectrumPrim = G.V; // S'=S
-    std::cout << "Tworzona sciezka: ";
+    path.oligos.emplace_back(oligo); 
+    std::vector<Vertex> spectrumPrim = G.V; 
+    std::cout << std::endl << "Tworzona sciezka: ";
     while (path.getCost(G, subSequencesLength) < n) {
         auto it = std::find(spectrumPrim.begin(), spectrumPrim.end(), oligo);
         if (it != spectrumPrim.end()) {
-            spectrumPrim.erase(it); // Usuń i* ze zbioru S'
+            spectrumPrim.erase(it); 
         }
-        oligo = chooseNext(spectrumPrim, path.oligos.back(), G, candidates); // i* = chooseNext(S'), do zmiany argumenty funkcji
-        path.oligos.emplace_back(oligo); // Rozszerz ścieżkę p, dodając i* na jej koniec,
+        oligo = chooseNext(spectrumPrim, path.oligos.back(), G, candidates); 
+        path.oligos.emplace_back(oligo);
         std::cout << oligo.label << " ";
     }
 
