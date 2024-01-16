@@ -1,29 +1,11 @@
 #include "./GreedyHeuristicAlgorithm.hpp"
-//  DANE
-//  n - liczba nukleotydów docelowej sekwencji st
-//  S = {1,...,m} spektrum, l - długość oligonukleotydów
-//  G=(V,A), V=S, i∈S - oligonukleotydy, l(i)- dlugosc oligonukleotydow, each a(i,j)∈A ma wagę o(i,j), która jest długością nici DNA o sufixie i oraz prefixie j
-//  p = (i1,...,ik) - sciezka hamiltona, l(p) - dlugosc sciezki jako lizcba oligonukleotydow, 
-//  koszt ścieżki p==>>   c(p) = l(p) * l - suma wszystkich o(p[r], p[r+1]) w zakresie r=1:l(p)-1
-//  szukamy: ściezki Hamlitona p* w G o l(p*) >= l(p) dla wszysztkich możliwych ścieżek p które spełniają c(p) <= n
-//
-//  ACO
-//  pib - iteration best solution -  the best solution generated in the current iteration by the ants
-//  pbs - best so far solution - the best solution generated since the start of the algorithm;
-//  prb - the restart-best solution -  the best solution generated since the last restart of the algorithm
-//  the convergence factor cf, 0 ≤ cf ≤ 1: a measure of how far the algorithm is from convergence;
-//  the Boolean variable bs update: it becomes true when the algorithm reaches convergence.
-// operator (f*) : f(p) > f(p') <=> l(p) > l(p') or (l(p) = l(p')) and c(p) < c*(p'))
-// nf - number of forward ants; od lewej do prawej
-// nb - number of backward ants; od prawej do lewej
-
 
 struct Vertex {
     std::string label;
     int ID;
 
     bool operator<(const Vertex& other) const {
-        return label < other.label;  // You may need to adjust the comparison based on your requirements
+        return label < other.label;  
     }
 
     bool operator==(const Vertex& other) const {
@@ -50,9 +32,9 @@ namespace std {
 }
 
 struct Edge {
-    Vertex u; // pierwszy
-    Vertex v; // drugi
-    float weight; // waga = długość oligonukleotydu - długość najdłuższej sekwencji, której sufiks u pokrywa się z prefiksem v
+    Vertex u; 
+    Vertex v; 
+    float weight; 
 
     Edge(const Vertex& u, const Vertex& v, float w) : u(u), v(v), weight(w) {}
 };
@@ -152,8 +134,6 @@ void findBestSubpath(const Path& path, const int& n, const int& subSeqLen, std::
     tempPath.oligos.emplace_back(path.oligos[0]);
     // jezeli dlugosc p jest wieksza niz dlugosc p* to p*=p
     // jezeli dlugosc p* <= n to zwroc p*
-
-
     // jezeli p* jest za dlugie to zwracamy nic
 }
 
@@ -170,8 +150,6 @@ float calculateScore(const Vertex& u, const Vertex& v, const Graph& G) {
 
 Vertex chooseNext(const std::vector<Vertex>& S, const Vertex& u, const Graph& G, std::multimap<Vertex, Vertex>& candidates) {
     // wybierz następny oligonukleotyd, patrząc w przód na potencjalne przyszłe najlepsze sąsiedztwo
-    // i* := argmax{op[l(p)]i + oi suc(i) | i ∈ Sˆ}
-    // Funkcja do obliczania oceny oligonukleotydu
     Vertex bestNextOligo;
     int maxScore=0;
     int maxSumScore = 0;
@@ -200,7 +178,7 @@ std::vector<Vertex> constructForwardSolution(const Graph& G, const int& n, const
             oligo = v;
             break;
         }
-    }//chooseInitialOligo(G.V); // i* =
+    } //chooseInitialOligo(G.V); // i* =
     std::vector<Path> paths;
     Path path;
     std::multimap<Vertex, Vertex> candidates;
@@ -219,7 +197,6 @@ std::vector<Vertex> constructForwardSolution(const Graph& G, const int& n, const
 
     std::cout<<std::endl;
     // path.oligos = findBestSubpath(path, n, subSequencesLength, candidates);
-
     return path.oligos;
 }
 
