@@ -24,25 +24,25 @@ std::string getSequence(const int &len)
     return sequence;
 }
 
-std::vector<std::string> getSubSequences(std::string &sequence, const int &subSeqLen, bool addPositiveErrors, bool addNegativeErrors)
+std::vector<std::string> getSubSequences(std::string &sequence, const int &subSeqLen, const int& pePercent, const int& nePercent)
 {
-    
     std::vector<std::string> subSequences;
-
-    for (size_t i = 0; i < sequence.length() - subSeqLen + 1; i++)
-    {
+    for (size_t i = 0; i < sequence.length() - subSeqLen + 1; i++){
         subSequences.push_back(sequence.substr(i, subSeqLen));
     }
-    //TODO: ask how many errors should occur per instance
-    if (addPositiveErrors)
-    {
-        subSequences.push_back(getSequence(subSeqLen));
-    }
 
-    if (addNegativeErrors)
-    {
-        int randomIndex = rand() % sequence.size();
-        subSequences.erase(subSequences.begin() + randomIndex);
+    if (pePercent!=0){
+        for (int peC = 0; peC < float(pePercent)/sequence.length(); peC++){
+            subSequences.push_back(getSequence(subSeqLen));
+         }
+    }
+     if (nePercent != 0) {
+        int numElementsToRemove = static_cast<int>(float(nePercent) / 100.0 * subSequences.size());
+        numElementsToRemove = std::min(numElementsToRemove, static_cast<int>(subSequences.size()));
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::shuffle(subSequences.begin(), subSequences.end(), gen);
+        subSequences.resize(subSequences.size() - numElementsToRemove);
     }
 
     std::sort(subSequences.begin(), subSequences.end());
