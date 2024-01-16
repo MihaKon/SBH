@@ -50,12 +50,12 @@ struct Graph {
         A.emplace_back(edge);
     }
 
-	void createAdjList() {
-		adjList.resize(V.size());
-		for (const auto& pair : A) {
-			adjList[pair.u.ID].insert(pair.v.ID);
-		}
+    void createAdjList() {
+	adjList.resize(V.size());
+	for (const auto& pair : A) {
+		adjList[pair.u.ID].insert(pair.v.ID);
 	}
+    }
 
     void constructGraph(const std::vector<std::string>& spectrum, const int& subSequencesLength) {
         for (const auto& label : spectrum) {
