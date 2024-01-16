@@ -16,7 +16,6 @@ struct Edge;
 struct Graph;
 struct Path;
 
-void findBestSubpath(const Path& path, const int& n, const int& subSeqLen, std::multimap<Vertex, Vertex>& candidates);
 Vertex chooseNext(const std::vector<Vertex>& S, const Vertex& u, const Graph& G, std::multimap<Vertex, Vertex>& candidates);
 float calculateScore(const Vertex& u, const Vertex& v, const Graph& G);
 std::vector<Vertex> constructForwardSolution(const Graph& G, const int& n, const int& subSequencesLength, const std::string& initialOligo);
