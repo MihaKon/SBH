@@ -16,7 +16,6 @@ struct Vertex {
         return label != other.label;
     }
 
-
     Vertex() : ID(0) {}
 
     Vertex(const std::string& l, int id) : label(l), ID(id) {}
@@ -53,20 +52,19 @@ struct Graph {
 
 	void createAdjList() {
 		adjList.resize(V.size());
-		for (auto& pair : A) {
+		for (const auto& pair : A) {
 			adjList[pair.u.ID].insert(pair.v.ID);
 		}
 	}
+
     void constructGraph(const std::vector<std::string>& spectrum, const int& subSequencesLength) {
-        // dodaj wierzchołki do zbioru V na podstawie spektrum
         for (const auto& label : spectrum) {
             Vertex vertex(label, static_cast<int>(V.size()));  
-            if (std::find(V.begin(), V.end(), vertex) == V.end()) {   // dodaj wierzchołek tylko jeśli nie istnieje jeszcze w wektorze
+            if (std::find(V.begin(), V.end(), vertex) == V.end()) {   
                  V.emplace_back(vertex);
             }
         }
 
-        // dodajemy krawędzie 
         for (int i = 0; i < V.size(); i++) {
             for (int j = 0; j < V.size(); j++) {
                 if (i != j) {
