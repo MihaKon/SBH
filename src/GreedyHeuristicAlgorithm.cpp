@@ -102,12 +102,7 @@ struct Path {
             Vertex oligo1 = oligos[i];
             Vertex oligo2 = oligos[i + 1];
 
-            for (const auto& edge : G.A) {
-                if (edge.u == oligo1 && edge.v == oligo2) {
-                    cost -= edge.weight;
-                    break;
-                }
-            }
+            cost -= calculateScore(oligo1, oligo2, G);
         }
         return cost;
     }
@@ -116,14 +111,11 @@ struct Path {
 };
 
 float calculateScore(const Vertex& u, const Vertex& v, const Graph& G) {
-    int matchingLength = 0;
-    for (const Edge& edge : G.A) {
-        if ((edge.u == u && edge.v == v)) {
-            matchingLength = edge.weight;
-            break;
-        }
+    auto range = G.edgeScores.equal_range(std::make_pair(u, v));
+    for (auto it = range.first; it != range.second; ++it) {
+        return it->second;
     }
-    return matchingLength;
+    return 0.0f;  
 }
 
 Vertex chooseNext(const std::vector<Vertex>& S, const Vertex& u, const Graph& G, std::multimap<Vertex, Vertex>& candidates) {
@@ -144,9 +136,8 @@ Vertex chooseNext(const std::vector<Vertex>& S, const Vertex& u, const Graph& G,
                 }
             }
         }
-        
     }
-
+	
     return bestNextOligo;
 }
 std::vector<Vertex> constructForwardSolution(const Graph& G, const int& n, const int& subSequencesLength, const std::string& initialOligo) {
@@ -174,7 +165,6 @@ std::vector<Vertex> constructForwardSolution(const Graph& G, const int& n, const
     }
 
     std::cout<<std::endl;
-    // path.oligos = findBestSubpath(path, n, subSequencesLength, candidates);
     return path.oligos;
 }
 
@@ -182,11 +172,8 @@ std::vector<std::string> SBH(const Graph& G, const int& n, const int& subSequenc
     std::vector<Vertex> verticesSolution = constructForwardSolution(G, n, subSequencesLength, initialOligo);
     std::vector<std::string> solution;
 
-    std::cout << "Sciezka: ";
     for (Vertex v : verticesSolution) {
-        std::cout << v.label << " ";
         solution.emplace_back(v.label);
     }
-    std::cout << std::endl;
     return solution;
 }
