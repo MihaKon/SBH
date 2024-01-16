@@ -115,26 +115,6 @@ struct Path {
     Path() {}
 };
 
-// funkcja do przebudowy albo usunieciaa
-void findBestSubpath(const Path& path, const int& n, const int& subSeqLen, std::multimap<Vertex, Vertex>& candidates) {
-    Graph newG;
-    std::vector<std::string> spectrum;
-    for (const Vertex& v : path.oligos){
-        spectrum.emplace_back(v.label);
-    }
-
-    newG.constructGraph(spectrum,subSeqLen);
-
-    std::string baseSequence = reproduceSequence(spectrum, subSeqLen);
-    int maxSize = baseSequence.length();
-
-    Path tempPath;
-    tempPath.oligos.emplace_back(path.oligos[0]);
-    // jezeli dlugosc p jest wieksza niz dlugosc p* to p*=p
-    // jezeli dlugosc p* <= n to zwroc p*
-    // jezeli p* jest za dlugie to zwracamy nic
-}
-
 float calculateScore(const Vertex& u, const Vertex& v, const Graph& G) {
     int matchingLength = 0;
     for (const Edge& edge : G.A) {
