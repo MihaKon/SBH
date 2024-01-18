@@ -50,12 +50,12 @@ struct Graph {
         A.emplace_back(edge);
     }
 
-    void createAdjList() {
-	adjList.resize(V.size());
-	for (const auto& pair : A) {
-		adjList[pair.u.ID].insert(pair.v.ID);
+	void createAdjList() {
+		adjList.resize(V.size());
+		for (const auto& pair : A) {
+			adjList[pair.u.ID].insert(pair.v.ID);
+		}
 	}
-    }
 
     void constructGraph(const std::vector<std::string>& spectrum, const int& subSequencesLength) {
         for (const auto& label : spectrum) {
@@ -118,7 +118,7 @@ float calculateScore(const Vertex& u, const Vertex& v, const Graph& G) {
     return 0.0f;  
 }
 
-Vertex chooseNext(const std::vector<Vertex>& S, const Vertex& u, const Graph& G, std::multimap<Vertex, Vertex>& candidates) {
+Vertex chooseNext(const std::vector<Vertex>& S, const Vertex& u, const Graph& G) {
     Vertex bestNextOligo;
     int maxScore=0;
     int maxSumScore = 0;
@@ -128,7 +128,6 @@ Vertex chooseNext(const std::vector<Vertex>& S, const Vertex& u, const Graph& G,
             for (const Vertex& oligo2 : S){
                 float score2 = calculateScore(oligo,oligo2,G);
                 if (score + score2 >= maxSumScore) {
-                    candidates.insert(std::make_pair(oligo,oligo2));
                     maxScore = score;
                     maxSumScore = score+score2;
                     bestNextOligo=oligo;
@@ -139,7 +138,8 @@ Vertex chooseNext(const std::vector<Vertex>& S, const Vertex& u, const Graph& G,
 	
     return bestNextOligo;
 }
-std::vector<Vertex> constructForwardSolution(const Graph& G, const int& n, const int& subSequencesLength, const std::string& initialOligo) {
+
+std::vector<std::string> SBH(const Graph& G, const int& n, const int& subSequencesLength, const std::string& initialOligo) {
     Vertex oligo;
     for (Vertex v : G.V){
         if (v.label == initialOligo){
@@ -147,31 +147,23 @@ std::vector<Vertex> constructForwardSolution(const Graph& G, const int& n, const
             break;
         }
     }
-    std::vector<Path> paths;
     Path path;
-    std::multimap<Vertex, Vertex> candidates;
     path.oligos.emplace_back(oligo); 
-    std::vector<Vertex> spectrumPrim = G.V; 
+    std::vector<Vertex> spectrumPrim = G.V;   
     std::cout << std::endl << "Tworzona sciezka: ";
     while (path.getCost(G, subSequencesLength) < n) {
         auto it = std::find(spectrumPrim.begin(), spectrumPrim.end(), oligo);
         if (it != spectrumPrim.end()) {
             spectrumPrim.erase(it); 
         }
-        oligo = chooseNext(spectrumPrim, path.oligos.back(), G, candidates); 
+        oligo = chooseNext(spectrumPrim, path.oligos.back(), G); 
         path.oligos.emplace_back(oligo);
         std::cout << oligo.label << " ";
     }
-
     std::cout<<std::endl;
-    return path.oligos;
-}
-
-std::vector<std::string> SBH(const Graph& G, const int& n, const int& subSequencesLength, const std::string& initialOligo) {
-    std::vector<Vertex> verticesSolution = constructForwardSolution(G, n, subSequencesLength, initialOligo);
     std::vector<std::string> solution;
 
-    for (Vertex v : verticesSolution) {
+    for (Vertex v : path.oligos) {
         solution.emplace_back(v.label);
     }
     return solution;
