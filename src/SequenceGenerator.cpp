@@ -2,10 +2,11 @@
 #include <vector>
 #include <random>
 #include <algorithm>
+#include <iostream>
 
 #include "SequenceGenerator.hpp"
 
-std::string getSequence(const int &len)
+std::string getSequence(int len)
 {
     const std::string nucleotides = "ACGT";
 
@@ -13,6 +14,7 @@ std::string getSequence(const int &len)
 
     std::random_device rd;
     std::mt19937 gen(rd());
+
 
     std::uniform_int_distribution<> dis(0, nucleotides.size() - 1);
 
@@ -44,8 +46,6 @@ std::vector<std::string> getSubSequences(std::string &sequence, const int &subSe
         std::shuffle(subSequences.begin(), subSequences.end(), gen);
         subSequences.resize(subSequences.size() - numElementsToRemove);
     }
-
-    std::sort(subSequences.begin(), subSequences.end());
 
     return subSequences;
 }
