@@ -30,3 +30,9 @@ int getLevenshteinDistance(std::string sequenceOne, std::string sequenceTwo)
 
     return verif[size1][size2];
 }
+
+double levenshteinPercentage(int levenshteinDistance, int maxLength) {
+    double percentage = 100.0 - ((double)(levenshteinDistance / maxLength) * 100.0);
+
+    return percentage;
+}
