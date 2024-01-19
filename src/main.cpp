@@ -12,8 +12,8 @@ int main()
     Sequence seq;
     seq.positiveError = true;
     seq.negativeError = true;
-    seq.sequenceLen = 100;
-    seq.subSequenceLen = 10;
+    seq.sequenceLen = 500;
+    seq.subSequenceLen = 7;
     seq.sequence = getSequence(seq.sequenceLen);
     seq.subSequences = getSubSequences(seq.sequence, seq.subSequenceLen, seq.positiveError, seq.negativeError);
     seq.startingSubSequence = seq.sequence.substr(0, seq.subSequenceLen);

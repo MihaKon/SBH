@@ -4,11 +4,13 @@
 #include <set>
 #include <map>
 #include <algorithm>
+#include <memory>
 
 struct adjNode
 {
     std::string val;
     int weight;
+    bool visited = false;
 
     adjNode(std::string v, int w) : val(v), weight(w) {}
 
@@ -20,7 +22,8 @@ struct adjNode
 struct Graph
 {
     std::string startingVertex;
-    std::map<std::string, std::vector<adjNode>> adjList;
+    std::vector<adjNode> visited;
+    std::map<std::string, std::vector<std::unique_ptr<adjNode>>> adjList;
 
     Graph(std::string startingVertex) : startingVertex(startingVertex) {}
 };
@@ -47,20 +50,29 @@ void sortAdjList(Graph &graph)
 {
     for (auto &adjList : graph.adjList)
     {
-        std::sort(adjList.second.begin(), adjList.second.end());
+        std::sort(adjList.second.begin(), adjList.second.end(),
+                      [](const std::unique_ptr<adjNode>& a, const std::unique_ptr<adjNode>& b) {
+                          return *a < *b;
+                      });
     }
 }
 
 void constructGraph(const std::vector<std::string> &subSequences, Graph &graph, int subSeqLen, int minWeightThreshold)
 {
+    
     for (int i = 0; i < subSequences.size(); i++)
     {
+        adjNode node(subSequences[i], 0);
+        graph.visited.push_back(node);
+
         for (int j = 0; j < subSequences.size(); j++)
         {
+            if(i == j) continue;
             int weight = getWeight(subSequences[i], subSequences[j], subSeqLen);
             if (weight >= minWeightThreshold)
             {
-                graph.adjList[subSequences[i]].push_back(adjNode(subSequences[j], weight));
+                std::unique_ptr<adjNode> nodePtr = std::make_unique<adjNode>(adjNode(subSequences[j], weight));
+                graph.adjList[subSequences[i]].push_back(std::move(nodePtr));
             }
         }
     }
@@ -88,9 +100,14 @@ std::string getOriginalSequence(
         {
             break;
         }
-        originalSequence = originalSequence + graph.adjList[currentVertex][0].val[subSeqLen - 1];
-        currentVertex = graph.adjList[currentVertex][0].val;
-    }
+        int nodeIndex = 0;
+        while(graph.adjList[currentVertex][nodeIndex]->visited)
+        {
+            nodeIndex++;
+        }
+        originalSequence += graph.adjList[currentVertex][0]->val[subSeqLen - 1];
+        currentVertex = graph.adjList[currentVertex][0]->val;
+    } 
     
     return originalSequence;
 }
