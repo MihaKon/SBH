@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
         instance << "SUB_SEQ_LENGTH: " << SubSeqLen << std::endl;
         Sequence sequenceStructure(SeqLen, SubSeqLen, positiveErrorPercentage, negativeErrorPercentage);
         sequenceStructure.sequence = getSequence(sequenceStructure.sequenceLen, &instance);
-        sequenceStructure.startingSubSequence = sequenceStructure.startingSubSequence.substr(0, sequenceStructure.subSequenceLen);
+        sequenceStructure.startingSubSequence = sequenceStructure.sequence.substr(0, sequenceStructure.subSequenceLen);
         sequenceStructure.subSequences = getSubSequences(
             sequenceStructure.sequence,
             sequenceStructure.subSequenceLen,
@@ -55,8 +55,6 @@ int main(int argc, char *argv[])
             sequenceStructure.subSequences,
             sequenceStructure.startingSubSequence);
 
-        std::cout << "Brute Force Result: " << bruteForceResult << std::endl;
-
         int tempBruteLeven = getLevenshteinDistance(bruteForceResult, sequenceStructure.sequence);
         totalBruteForceLevenshteinDistance += tempBruteLeven;
         totalBruteForceLevenshteinPercentage += levenshteinPercentage(tempBruteLeven, std::max(bruteForceResult.length(), sequenceStructure.sequence.length()));
@@ -64,11 +62,11 @@ int main(int argc, char *argv[])
         Graph G;
         G.constructGraph(sequenceStructure.subSequences, sequenceStructure.subSequenceLen);
         std::vector<std::string> kmers = SBH(G, sequenceStructure.sequenceLen, sequenceStructure.subSequenceLen, sequenceStructure.startingSubSequence);
-        std::string greedyHeuristicResult = reproduceSequence(sequenceStructure.subSequences, sequenceStructure.subSequenceLen);
+        std::string greedyHeuristicResult = reproduceSequence(kmers, sequenceStructure.subSequenceLen);
 
         int tempGreedyLeven = getLevenshteinDistance(greedyHeuristicResult, sequenceStructure.sequence);
-        totalBruteForceLevenshteinDistance += tempGreedyLeven;
-        totalBruteForceLevenshteinPercentage += levenshteinPercentage(tempGreedyLeven, std::max(greedyHeuristicResult.length(), sequenceStructure.sequence.length()));
+        totalGreedyHeuristicLevenshteinDistance += tempGreedyLeven;
+        totalGreedyHeuristicLevenshteinPercentage += levenshteinPercentage(tempGreedyLeven, std::max(greedyHeuristicResult.length(), sequenceStructure.sequence.length()));
 
         instance << std::endl;
     }
