@@ -80,6 +80,27 @@ void constructGraph(const std::vector<std::string> &subSequences, Graph &graph, 
     sortAdjList(graph);
 }
 
+void dfs(Graph &graph, const std::string &currentVertex, std::string &originalSequence, int seqLen, int subSeqLen)
+{
+    if (graph.adjList[currentVertex].empty() || originalSequence.length() >= seqLen)
+    {
+        return;
+    }
+
+    int nodeIndex = 0;
+    while (nodeIndex < graph.adjList[currentVertex].size() && graph.adjList[currentVertex][nodeIndex]->visited)
+    {
+        nodeIndex++;
+    }
+
+    if(!graph.adjList[currentVertex][nodeIndex]->visited) {
+        graph.adjList[currentVertex][nodeIndex]->visited = true;
+        originalSequence += graph.adjList[currentVertex][nodeIndex]->val[subSeqLen - 1];
+    }
+    graph.adjList[currentVertex][nodeIndex]->visited = true;
+    dfs(graph, graph.adjList[currentVertex][nodeIndex]->val, originalSequence, seqLen, subSeqLen);
+}
+
 std::string getOriginalSequence(
     int seqLen,
     int subSeqLen,
@@ -94,20 +115,7 @@ std::string getOriginalSequence(
     std::string originalSequence = startingSubSeq;
     std::string currentVertex = startingSubSeq;
 
-    for(int i = 0; i < seqLen - subSeqLen; i++)
-    {
-        if(graph.adjList[currentVertex].size() == 0)
-        {
-            break;
-        }
-        int nodeIndex = 0;
-        while(graph.adjList[currentVertex][nodeIndex]->visited)
-        {
-            nodeIndex++;
-        }
-        originalSequence += graph.adjList[currentVertex][0]->val[subSeqLen - 1];
-        currentVertex = graph.adjList[currentVertex][0]->val;
-    } 
+    dfs(graph, currentVertex, originalSequence, seqLen, subSeqLen);
     
     return originalSequence;
 }
