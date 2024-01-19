@@ -12,8 +12,8 @@ set(SOURCES
     src/LevenshteinDistanceCalc.cpp
     src/BruteForceAlgorithm.hpp
     src/BruteForceAlgorithm.cpp
-    src/SequenceReproducer.hpp
-    src/SequenceReproducer.cpp
+    src/sequenceReproducer.hpp
+    src/sequenceReproducer.cpp
     src/GreedyHeuristicAlgorithm.hpp
     src/GreedyHeuristicAlgorithm.cpp
     )
