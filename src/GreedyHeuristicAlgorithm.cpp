@@ -150,7 +150,6 @@ std::vector<std::string> SBH(const Graph& G, const int& n, const int& subSequenc
     Path path;
     path.oligos.emplace_back(oligo); 
     std::vector<Vertex> spectrumPrim = G.V;   
-    std::cout << std::endl << "Tworzona sciezka: ";
     while (path.getCost(G, subSequencesLength) < n) {
         auto it = std::find(spectrumPrim.begin(), spectrumPrim.end(), oligo);
         if (it != spectrumPrim.end()) {
@@ -158,9 +157,7 @@ std::vector<std::string> SBH(const Graph& G, const int& n, const int& subSequenc
         }
         oligo = chooseNext(spectrumPrim, path.oligos.back(), G); 
         path.oligos.emplace_back(oligo);
-        std::cout << oligo.label << " ";
     }
-    std::cout<<std::endl;
     std::vector<std::string> solution;
 
     for (Vertex v : path.oligos) {

@@ -8,6 +8,10 @@ set(SOURCES
     src/SequenceStructure.hpp
     src/SequenceGenerator.hpp
     src/SequenceGenerator.cpp
+    # src/SequenceReproducer.hpp
+    # src/SequenceReproducer.cpp
+    # src/GreedyHeuristicAlgorithm.hpp
+    # src/GreedyHeuristicAlgorithm.cpp
     src/LevenshteinDistanceCalc.hpp
     src/LevenshteinDistanceCalc.cpp
     src/BruteForceAlgorithm.hpp

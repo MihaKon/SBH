@@ -1,5 +1,3 @@
-#include <string>
-#include <vector>
 #include "./LevenshteinDistanceCalc.hpp"
 
 int getLevenshteinDistance(std::string sequenceOne, std::string sequenceTwo)

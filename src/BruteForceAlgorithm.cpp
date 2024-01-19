@@ -19,13 +19,13 @@ struct adjNode
     }
 };
 
-struct Graph
+struct GreedyAlgGraph
 {
     std::string startingVertex;
     std::vector<adjNode> visited;
     std::map<std::string, std::vector<std::unique_ptr<adjNode>>> adjList;
 
-    Graph(std::string startingVertex) : startingVertex(startingVertex) {}
+    GreedyAlgGraph(std::string startingVertex) : startingVertex(startingVertex) {}
 };
 
 
@@ -46,7 +46,7 @@ int getWeight(const std::string &str1, const std::string &str2, int subSeqLen)
     return commonElements;
 }
 
-void sortAdjList(Graph &graph)
+void sortAdjList(GreedyAlgGraph &graph)
 {
     for (auto &adjList : graph.adjList)
     {
@@ -57,7 +57,7 @@ void sortAdjList(Graph &graph)
     }
 }
 
-void constructGraph(const std::vector<std::string> &subSequences, Graph &graph, int subSeqLen, int minWeightThreshold)
+void constructGraph(const std::vector<std::string> &subSequences, GreedyAlgGraph &graph, int subSeqLen, int minWeightThreshold)
 {
     
     for (int i = 0; i < subSequences.size(); i++)
@@ -80,7 +80,7 @@ void constructGraph(const std::vector<std::string> &subSequences, Graph &graph, 
     sortAdjList(graph);
 }
 
-void dfs(Graph &graph, const std::string &currentVertex, std::string &originalSequence, int seqLen, int subSeqLen)
+void dfs(GreedyAlgGraph &graph, const std::string &currentVertex, std::string &originalSequence, int seqLen, int subSeqLen)
 {
     if (graph.adjList[currentVertex].empty() || originalSequence.length() >= seqLen)
     {
@@ -105,11 +105,9 @@ std::string getOriginalSequence(
     int seqLen,
     int subSeqLen,
     const std::vector<std::string> &subSequences,
-    const std::string &startingSubSeq,
-    bool positiveErrors,
-    bool negativeErrors)
+    const std::string &startingSubSeq)
 {
-    Graph graph(startingSubSeq);
+    GreedyAlgGraph graph(startingSubSeq);
     constructGraph(subSequences, graph, subSeqLen, subSeqLen - 3);
 
     std::string originalSequence = startingSubSeq;
