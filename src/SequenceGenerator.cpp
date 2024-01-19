@@ -2,10 +2,11 @@
 #include <vector>
 #include <random>
 #include <algorithm>
+#include <iostream>
 
 #include "SequenceGenerator.hpp"
 
-std::string getSequence(const int &len)
+std::string getSequence(int len)
 {
     const std::string nucleotides = "ACGT";
 
@@ -13,6 +14,7 @@ std::string getSequence(const int &len)
 
     std::random_device rd;
     std::mt19937 gen(rd());
+
 
     std::uniform_int_distribution<> dis(0, nucleotides.size() - 1);
 
@@ -24,16 +26,23 @@ std::string getSequence(const int &len)
     return sequence;
 }
 
-std::vector<std::string> getSubSequences(std::string &sequence, const int &subSeqLen, bool addPositiveErrors, bool addNegativeErrors)
+std::vector<std::string> getSubSequences(std::string &sequence, int subSeqLen, bool addPositiveErrors, bool addNegativeErrors)
 {
-    
+
     std::vector<std::string> subSequences;
 
     for (size_t i = 0; i < sequence.length() - subSeqLen + 1; i++)
     {
         subSequences.push_back(sequence.substr(i, subSeqLen));
     }
-    //TODO: ask how many errors should occur per instance
+
+    std::sort(subSequences.begin(), subSequences.end());
+    // subSequences.erase(std::unique(subSequences.begin(), subSequences.end(), subSequences.end()));
+    if(subSequences.size() != sequence.size() - subSeqLen + 1) {
+        std::cout<<"Sub-Sequence contain negative error!\n";
+    }
+
+
     if (addPositiveErrors)
     {
         subSequences.push_back(getSequence(subSeqLen));
@@ -44,8 +53,6 @@ std::vector<std::string> getSubSequences(std::string &sequence, const int &subSe
         int randomIndex = rand() % sequence.size();
         subSequences.erase(subSequences.begin() + randomIndex);
     }
-
-    std::sort(subSequences.begin(), subSequences.end());
 
     return subSequences;
 }

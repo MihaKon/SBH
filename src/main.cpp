@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-
 #include "./SequenceGenerator.hpp"
 #include "./AntColonyAlgorithm.hpp"
 int main(){
