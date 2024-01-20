@@ -55,6 +55,8 @@ std::vector<std::string> getSubSequences(std::string &sequence, const int subSeq
         subSequences.resize(subSequences.size() - numElementsToRemove);
     }
 
+    std::sort(subSequences.begin(), subSequences.end());
+
     if (file->is_open())
     {
         *file << "SUBSEQ: ";
