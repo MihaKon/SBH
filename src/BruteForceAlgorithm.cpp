@@ -88,6 +88,11 @@ void dfs(GreedyAlgGraph &graph, const std::string &currentVertex, std::string &o
     }
 
     int nodeIndex = 0;
+    while (nodeIndex < graph.adjList[currentVertex].size() && graph.adjList[currentVertex][nodeIndex]->visited)
+    {
+        nodeIndex++;
+    }
+
     if (nodeIndex < graph.adjList[currentVertex].size() && !graph.adjList[currentVertex][nodeIndex]->visited)
     {
         graph.adjList[currentVertex][nodeIndex]->visited = true;
