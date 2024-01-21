@@ -6,6 +6,7 @@
 #include <optional>
 #include <map>
 #include <unordered_map>
+#include <queue>
 
 #include "./SequenceReproducer.hpp"
 #include "./SequenceReproducer.cpp"
