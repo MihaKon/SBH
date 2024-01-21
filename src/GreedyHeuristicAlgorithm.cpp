@@ -111,6 +111,22 @@ float calculateScore(const Vertex& u, const Vertex& v, const Graph& G) {
     return 0.0f;  
 }
 
+Path findBestSubpath(const Path& path, const Graph& G, const int& n, const int& subSequencesLength) {
+    Path newPath;
+    if (path.oligos.empty()) {
+        return newPath; // Return an empty path if the input path is empty
+    }
+
+    newPath.oligos.emplace_back(path.oligos[0]);
+    int i = 1;
+    while (i < path.oligos.size() && newPath.getCost(G, subSequencesLength) <= n) {
+        newPath.oligos.emplace_back(path.oligos[i]);
+        i++;
+    }
+
+    return newPath;
+}
+
 Vertex chooseNext(const std::vector<Vertex>& S, const Vertex& u, const Graph& G) {
     std::priority_queue<std::pair<float, Vertex>> pq; 
     Vertex bestNextOligo;
@@ -167,6 +183,7 @@ std::vector<std::string> SBH(const Graph& G, const int& n, const int& subSequenc
         }
         else break;
     }
+    path = findBestSubpath(path, G, n, subSequencesLength);
 
     std::vector<std::string> solution;
 
