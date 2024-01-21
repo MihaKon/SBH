@@ -32,7 +32,7 @@ int getLevenshteinDistance(std::string sequenceOne, std::string sequenceTwo)
 }
 
 double levenshteinPercentage(int levenshteinDistance, int maxLength) {
-    double percentage = 100.0 - ((double)(levenshteinDistance / maxLength) * 100.0);
+    double percentage = (static_cast<double>(levenshteinDistance) / maxLength) * 100.0;
 
     return percentage;
 }
