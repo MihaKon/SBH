@@ -31,15 +31,14 @@ std::vector<std::string> getSubSequences(std::string &sequence, const int subSeq
     std::vector<std::string> subSequences;
     for (size_t i = 0; i < sequence.length() - subSeqLen + 1; i++)
     {
-        subSequences.push_back(sequence.substr(i, subSeqLen));
+        subSequences.emplace_back(sequence.substr(i, subSeqLen));
     }
 
-    if (pePercent != 0)
-    {
-        for (int peC = 0; peC < float(pePercent) / sequence.length(); peC++)
+    if (pePercent != 0){
+    for (int peC = 0; peC < static_cast<int>((float(pePercent) / 100.0) * subSequences.size()); peC++)
         {
             std::string subSeq = getSequence(subSeqLen);
-            subSequences.push_back(subSeq);
+            subSequences.emplace_back(subSeq);
             if(file->is_open()) {
                 *file << "PE: " << subSeq << std::endl;
             }
