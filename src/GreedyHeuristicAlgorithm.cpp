@@ -43,19 +43,11 @@ struct Graph {
     std::vector<Edge> A;
     std::vector<std::vector<Vertex>> successorsList;
     std::multimap<std::pair<Vertex, Vertex>, int> edgeScores;
-    std::vector<std::set<int>> adjList;
 
     void addEdge(Vertex u, Vertex v, float weight) {
         Edge edge(u, v, weight);
         A.emplace_back(edge);
     }
-
-	void createAdjList() {
-		adjList.resize(V.size());
-		for (const auto& pair : A) {
-			adjList[pair.u.ID].insert(pair.v.ID);
-		}
-	}
 
     void constructGraph(const std::vector<std::string>& spectrum, const int& subSequencesLength) {
         for (const auto& label : spectrum) {
@@ -65,19 +57,19 @@ struct Graph {
             }
         }
 
-        for (int i = 0; i < V.size(); i++) {
-            for (int j = 0; j < V.size(); j++) {
-                if (i != j) {
+        for (const auto& u : V){
+            for (const auto& v: V){
+                if (u != v) {
                     int matchingLength = 0;
                     std::string iLabel = "";
                     std::string jLabel = "";
                     for (int k = 1; k < subSequencesLength; k++) {
-                        iLabel = V[i].label[V[i].label.length() - k] + iLabel;
-                        jLabel += V[j].label[k - 1];
+                        iLabel = u.label[u.label.length() - k] + iLabel;
+                        jLabel += v.label[k - 1];
                         if (iLabel == jLabel)
                             matchingLength = iLabel.length();
                     }
-                    addEdge(V[i], V[j], matchingLength);
+                    addEdge(u, v, matchingLength);
                 }
             }
         }
@@ -96,7 +88,7 @@ struct Path {
 
     float getCost(const Graph& G, const int& l) const {
         int pathLength = oligos.size(); 
-        float cost = pathLength * l;
+        int cost = pathLength * l;
 
         for (int i = 0; i < pathLength - 1; i++) {
             Vertex oligo1 = oligos[i];
@@ -110,6 +102,7 @@ struct Path {
     Path() {}
 };
 
+
 float calculateScore(const Vertex& u, const Vertex& v, const Graph& G) {
     auto range = G.edgeScores.equal_range(std::make_pair(u, v));
     for (auto it = range.first; it != range.second; ++it) {
@@ -118,25 +111,50 @@ float calculateScore(const Vertex& u, const Vertex& v, const Graph& G) {
     return 0.0f;  
 }
 
+Path findBestSubpath(const Path& path, const Graph& G, const int& n, const int& subSequencesLength) {
+    Path newPath;
+    if (path.oligos.empty()) {
+        return newPath; // Return an empty path if the input path is empty
+    }
+
+    newPath.oligos.emplace_back(path.oligos[0]);
+    int i = 1;
+    while (i < path.oligos.size() && newPath.getCost(G, subSequencesLength) <= n) {
+        newPath.oligos.emplace_back(path.oligos[i]);
+        i++;
+    }
+
+    return newPath;
+}
+
 Vertex chooseNext(const std::vector<Vertex>& S, const Vertex& u, const Graph& G) {
+    std::priority_queue<std::pair<float, Vertex>> pq; 
     Vertex bestNextOligo;
     int maxScore=0;
     int maxSumScore = 0;
     for (const Vertex& oligo : S) {
         float score = calculateScore(u,oligo,G);
         if (score > maxScore){
-            for (const Vertex& oligo2 : S){
-                float score2 = calculateScore(oligo,oligo2,G);
-                if (score + score2 >= maxSumScore) {
-                    maxScore = score;
-                    maxSumScore = score+score2;
-                    bestNextOligo=oligo;
-                }
+            if (S.size()>1){
+                for (const Vertex& oligo2 : S){
+                    float score2 = calculateScore(oligo,oligo2,G);
+                    if (score + score2 >= maxSumScore) {
+                        maxScore = score;
+                        maxSumScore = score+score2;
+                        bestNextOligo=oligo;
+                    }
+                }   
             }
         }
+
+        pq.push({score, bestNextOligo});
     }
-	
-    return bestNextOligo;
+    
+    if (!pq.empty()) {
+        return pq.top().second; 
+    }
+
+    return Vertex();
 }
 
 std::vector<std::string> SBH(const Graph& G, const int& n, const int& subSequencesLength, const std::string& initialOligo) {
@@ -147,17 +165,26 @@ std::vector<std::string> SBH(const Graph& G, const int& n, const int& subSequenc
             break;
         }
     }
+
     Path path;
     path.oligos.emplace_back(oligo); 
+
     std::vector<Vertex> spectrumPrim = G.V;   
     while (path.getCost(G, subSequencesLength) < n) {
         auto it = std::find(spectrumPrim.begin(), spectrumPrim.end(), oligo);
         if (it != spectrumPrim.end()) {
             spectrumPrim.erase(it); 
         }
-        oligo = chooseNext(spectrumPrim, path.oligos.back(), G); 
-        path.oligos.emplace_back(oligo);
+
+        if (spectrumPrim.size()!=0){
+            oligo = chooseNext(spectrumPrim, path.oligos.back(), G); 
+            if(oligo.label == "") break;
+            path.oligos.emplace_back(oligo);
+        }
+        else break;
     }
+    path = findBestSubpath(path, G, n, subSequencesLength);
+
     std::vector<std::string> solution;
 
     for (Vertex v : path.oligos) {

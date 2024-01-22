@@ -13,17 +13,23 @@
 
 int main(int argc, char *argv[])
 {
-    if (argc != 6)
-    {
-        std::cout << "Wrong number of arguments! " << argc << std::endl;
-        return 1;
-    }
+    // if (argc != 6)
+    // {
+    //     std::cout << "Wrong number of arguments! " << argc << std::endl;
+    //     return 1;
+    // }
 
-    int instances = atoi(argv[1]);
-    int SeqLen = atoi(argv[2]);
-    int SubSeqLen = atoi(argv[3]);
-    int positiveErrorPercentage = atoi(argv[4]);
-    int negativeErrorPercentage = atoi(argv[5]);
+    // int instances = atoi(argv[1]);
+    // int SeqLen = atoi(argv[2]);
+    // int SubSeqLen = atoi(argv[3]);
+    // int positiveErrorPercentage = atoi(argv[4]);
+    // int negativeErrorPercentage = atoi(argv[5]);
+
+    int instances = 5;
+    int SeqLen = 700;
+    int SubSeqLen = 8;
+    int positiveErrorPercentage = 0;
+    int negativeErrorPercentage = 20;
 
     std::fstream result("result.txt", std::ios::out);
     result << "\"ALGORITHM\",\"SEQ_LENGTH\",\"SUB_SEQ_LENGTH\",\"POSITIVE_ERROR_PERCENTAGE\",\"NEGATIVE_ERROR_PERCENTAGE\",\"AVG. LEVENSHTEIN_DISTANCE PER " << instances << " INSTANCES\",\"AVG. LEVENSHTEIN_PERCENTAGE PER " << instances << " INSTANCES\"" << std::endl;

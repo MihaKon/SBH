@@ -93,12 +93,12 @@ void dfs(GreedyAlgGraph &graph, const std::string &currentVertex, std::string &o
         nodeIndex++;
     }
 
-    if(!graph.adjList[currentVertex][nodeIndex]->visited) {
+    if (nodeIndex < graph.adjList[currentVertex].size() && !graph.adjList[currentVertex][nodeIndex]->visited)
+    {
         graph.adjList[currentVertex][nodeIndex]->visited = true;
         originalSequence += graph.adjList[currentVertex][nodeIndex]->val[subSeqLen - 1];
+        dfs(graph, graph.adjList[currentVertex][nodeIndex]->val, originalSequence, seqLen, subSeqLen);
     }
-    graph.adjList[currentVertex][nodeIndex]->visited = true;
-    dfs(graph, graph.adjList[currentVertex][nodeIndex]->val, originalSequence, seqLen, subSeqLen);
 }
 
 std::string getOriginalSequence(
