@@ -39,9 +39,6 @@ std::vector<std::string> getSubSequences(std::string &sequence, const int subSeq
         {
             std::string subSeq = getSequence(subSeqLen);
             subSequences.emplace_back(subSeq);
-            if(file->is_open()) {
-                *file << "PE: " << subSeq << std::endl;
-            }
         }
     }
     if (nePercent != 0)
@@ -58,7 +55,7 @@ std::vector<std::string> getSubSequences(std::string &sequence, const int subSeq
 
     if (file->is_open())
     {
-        *file << "SUBSEQ: ";
+        *file << "SUB_SEQ: ";
         for (const auto &subSeq : subSequences)
         {
             *file << subSeq << " ";
